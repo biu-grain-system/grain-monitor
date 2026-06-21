@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 from datetime import date, datetime
 
 st.set_page_config(
-    page_title="Kiribati Grain Monitor",
+    page_title="MTCIC-BIU Grain Monitor",
     page_icon="🌾",
     layout="wide",
     initial_sidebar_state="expanded",

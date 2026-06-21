@@ -58,7 +58,7 @@ st.markdown("""<style>
 st.sidebar.image(
     "https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kiribati.svg",
     width=150)
-st.sidebar.title("🌾 Kiribati Grain Monitor")
+st.sidebar.title("🌾 Kiribati - MTCIC Grain Monitor")
 st.sidebar.caption("Cargo Update — June 2026")
 st.sidebar.markdown("---")
 st.sidebar.markdown("""**Commodities**
@@ -86,7 +86,7 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 # TAB 1 — DASHBOARD
 # ══════════════════════════════════════════════════════════════════════════════
 with tab1:
-    st.title("🌾 Kiribati Grain Monitoring System")
+    st.title("🌾 Kiribati - MTCIC Grain Monitoring System")
     st.markdown("**Source:** cargo_update_June_2026.xlsx &nbsp;|&nbsp; Ministry of Commerce, Kiribati")
     st.markdown("---")
 

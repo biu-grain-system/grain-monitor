@@ -91,7 +91,7 @@ with tab1:
     st.markdown("---")
 
     # Latest S.Tarawa totals (May 2026)
-    st.markdown('<div class="section-title">📦 S.Tarawa Current Stock (May 2026)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">📦 S.Tarawa Current Stock </div>', unsafe_allow_html=True)
     latest_sta = q("""
         SELECT commodity, total_stock, quota_daily, est_days, last_date, comments
         FROM s_tarawa_analysis WHERE report_month='May 2026'

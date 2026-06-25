@@ -408,7 +408,7 @@ with tab4:
                                  title="Rice (bags by supplier)",
                                  labels={"rice_bags":"Bags","supplier":"Supplier"})
                     fig.update_layout(margin=dict(t=40,b=10,l=10,r=10))
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, use_container_width=True, key=f"rice_{period}")
 
             with c2:
                 sug_sup = sub[sub["sugar_bags"]>0].sort_values("sugar_bags",ascending=True)
@@ -419,7 +419,7 @@ with tab4:
                                   title="Sugar (bags by supplier)",
                                   labels={"sugar_bags":"Bags","supplier":"Supplier"})
                     fig2.update_layout(margin=dict(t=40,b=10,l=10,r=10))
-                    st.plotly_chart(fig2, use_container_width=True)
+                    st.plotly_chart(fig2, use_container_width=True, key=f"sugar_{period}")
 
         st.markdown("---")
         st.subheader("Full Cargo Table")

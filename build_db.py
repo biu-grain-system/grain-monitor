@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS suppliers (
 
 CREATE TABLE IF NOT EXISTS cargo_arrivals (
     id              INTEGER PRIMARY KEY,
-    report_month    TEXT NOT NULL,        -- e.g. 'February 2026'
-    report_date     TEXT NOT NULL,        -- ISO date
+    report_month    TEXT NOT NULL,
+    report_date     TEXT NOT NULL,
     supplier_id     INTEGER REFERENCES suppliers(id),
     rice_fcl        INTEGER DEFAULT 0,
     rice_bags       INTEGER DEFAULT 0,
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS s_tarawa_analysis (
     id              INTEGER PRIMARY KEY,
     report_month    TEXT NOT NULL,
     report_date     TEXT NOT NULL,
-    commodity       TEXT NOT NULL,        -- 'Rice','Sugar','Flour'
+    commodity       TEXT NOT NULL,
     unit_kg         REAL NOT NULL,
     manifest_bags   INTEGER DEFAULT 0,
     quota_daily     INTEGER DEFAULT 0,
@@ -85,12 +85,12 @@ CREATE TABLE IF NOT EXISTS shipping_schedule (
     voyage_no       TEXT,
     origin_port     TEXT,
     destination_port TEXT,
-    etd_date        TEXT,                 -- estimated time of departure
-    eta_date        TEXT NOT NULL,        -- estimated time of arrival
-    commodity       TEXT,                 -- 'Rice','Sugar','Flour','Mixed'
+    etd_date        TEXT,
+    eta_date        TEXT NOT NULL,
+    commodity       TEXT,
     qty_bags        INTEGER DEFAULT 0,
     qty_fcl         INTEGER DEFAULT 0,
-    status          TEXT DEFAULT 'Scheduled',  -- Scheduled, In Transit, Delayed, Arrived, Cancelled
+    status          TEXT DEFAULT 'Scheduled',
     remarks         TEXT
 );
 
@@ -115,7 +115,6 @@ SELECT
 FROM outer_island_stock;
 """
 
-# Suppliers — using named columns to avoid column-count mismatch
 SUPPLIERS = [
     (1,  "Taotin Trading"),
     (2,  "Moel Trading"),
@@ -142,7 +141,6 @@ SUPPLIERS = [
     (23, "Ellan Enterprice"),
 ]
 
-# Cargo arrivals — February 2026
 FEB_CARGO = [
     ("February 2026", "2026-02-10", 4,  0, 0,    10, 10000, 8, 8320),
     ("February 2026", "2026-02-10", 6,  6, 8928,  0, 0,     0, 0),
@@ -153,7 +151,6 @@ FEB_CARGO = [
     ("February 2026", "2026-02-10", 21, 2, 2500,  0, 0,     0, 0),
 ]
 
-# Cargo arrivals — May 2026
 MAY_CARGO = [
     ("May 2026", "2026-05-11", 2,  0, 0,     5, 9000,  0, 0),
     ("May 2026", "2026-05-11", 4,  8, 11024, 10,10000, 0, 0),
@@ -167,7 +164,6 @@ MAY_CARGO = [
 
 CARGO_ARRIVALS = FEB_CARGO + MAY_CARGO
 
-# S.Tarawa analysis
 S_TARAWA = [
     ("February 2026","2026-02-10","Rice",  18.14,17916,1926,80505,98421, 51.10,"2026-04-02","Okay"),
     ("February 2026","2026-02-10","Sugar", 25.0, 10900,925,  0,   10900, 11.78,"2026-02-21","Okay"),
@@ -286,13 +282,11 @@ CARGO_OI = [
     ("Kiritimati",0,0,0),("Tabuaeran",0,0,0),("Teraina",0,0,0),("Betio",0,0,0),
 ]
 
-# Shipping schedule starts empty — records are added via Data Entry only.
 SHIPPING_SCHEDULE = []
 
 
 def migrate(con):
     """Apply schema changes to an existing database (safe to re-run)."""
-    # Suppliers: add missing columns if they don't exist yet
     for col_def in [
         "contact_person TEXT", "phone TEXT",
         "email TEXT", "address TEXT", "notes TEXT"
@@ -302,7 +296,6 @@ def migrate(con):
         except Exception:
             pass
 
-    # s_tarawa_analysis: add UNIQUE constraint via a safe table rebuild if needed
     indexes = [r[1] for r in con.execute("PRAGMA index_list(s_tarawa_analysis)").fetchall()]
     if not any("unique" in i.lower() or "sta_unique" in i.lower() for i in indexes):
         try:
@@ -317,11 +310,18 @@ def migrate(con):
 
 
 def build():
+    # ✅ FIXED: Only build if the DB truly does not exist.
+    # Never delete an existing database — that would erase all user-entered data.
     if os.path.exists(DB):
-        os.remove(DB)
+        print(f"INFO: DB already exists at {DB} — skipping seed to preserve entered data.")
+        con = sqlite3.connect(DB)
+        migrate(con)
+        con.close()
+        return
+
+    # Fresh install — create and seed the database from scratch
     con = sqlite3.connect(DB)
     con.executescript(SCHEMA)
-    # FIX: use named columns so tuple length never mismatches schema
     con.executemany(
         "INSERT OR IGNORE INTO suppliers(id, name) VALUES(?,?)",
         SUPPLIERS)
@@ -332,7 +332,7 @@ def build():
         "INSERT OR REPLACE INTO s_tarawa_analysis(report_month,report_date,commodity,unit_kg,manifest_bags,quota_daily,remaining_stock,total_stock,est_days,last_date,comments) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
         S_TARAWA)
     con.executemany(
-        "INSERT OR REPLACE INTO outer_island_stock(island,commodity,stock_bags,daily_quota,est_days,current_date,last_date,comments) VALUES(?,?,?,?,?,?,?,?)",
+        "INSERT OR REPLACE INTO outer_island_stock(island,commodity,stock_bags,daily_quota,est_days,current_date,last_date,comments) VALUES(?,?,?,?,?,?,?,?,?)",
         OUTER)
     con.executemany(
         "INSERT OR IGNORE INTO annual_incoming(year,month,rice_bags,sugar_bags,flour_bags) VALUES(?,?,?,?,?)",

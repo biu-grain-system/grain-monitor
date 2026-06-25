@@ -90,7 +90,7 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 # ══════════════════════════════════════════════════════════════════════════════
 with tab1:
     st.title("🌾 Kiribati - MTCIC Grain Monitoring System")
-    st.markdown("**Source:** cargo_update &nbsp;|&nbsp; Ministry of Commerce, Kiribati")
+    st.markdown("**Source:** cargo_update &nbsp;|&nbsp; Ministry of Tourism, Commerce, Industry & Cooperatives, Kiribati")
     st.markdown("---")
 
     # Latest S.Tarawa totals (May 2026)

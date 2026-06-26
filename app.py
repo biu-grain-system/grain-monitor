@@ -45,7 +45,7 @@ st.markdown("""<style>
 ISLAND_STATUS_SQL = """
 SELECT
     island, commodity, stock_bags, daily_quota, est_days,
-    current_date, last_date,
+    data_date, last_date,
     CASE
         WHEN LOWER(comments) LIKE '%crisis%'     THEN 'CRISIS'
         WHEN LOWER(comments) LIKE '%not enough%' THEN 'LOW'
@@ -276,7 +276,7 @@ with tab3:
     st.markdown("---")
     st.subheader("Full Outer Island Table")
     oi_disp = oi_f[["island", "commodity", "stock_bags", "daily_quota", "est_days",
-                     "current_date", "last_date", "status"]].copy()
+                     "data_date", "last_date", "status"]].copy()
     oi_disp.columns = ["Island", "Commodity", "Stock (bags)", "Daily Quota",
                        "Est. Days", "Data Date", "Last Date", "Status"]
 
@@ -563,11 +563,11 @@ with tab6:
         comm2_s = st.text_input("Comments", "")
         if st.button("💾 Update Island Stock"):
             run("""INSERT INTO outer_island_stock
-                (island,commodity,stock_bags,daily_quota,est_days,current_date,last_date,comments)
+                (island,commodity,stock_bags,daily_quota,est_days,data_date,last_date,comments)
                 VALUES(%s,%s,%s,%s,%s,%s,%s,%s)
                 ON CONFLICT(island,commodity) DO UPDATE SET
                     stock_bags=EXCLUDED.stock_bags, daily_quota=EXCLUDED.daily_quota,
-                    est_days=EXCLUDED.est_days, current_date=EXCLUDED.current_date,
+                    est_days=EXCLUDED.est_days, data_date=EXCLUDED.data_date,
                     last_date=EXCLUDED.last_date, comments=EXCLUDED.comments""",
                 (island, comm2, stock, dquota, est2, str(cur_dt), last2, comm2_s))
             st.success(f"✅ {island} — {comm2} updated")

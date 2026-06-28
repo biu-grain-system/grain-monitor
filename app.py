@@ -65,7 +65,7 @@ st.sidebar.image(
     "https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kiribati.svg",
     width=150)
 st.sidebar.title("🌾 Kiribati - MTCIC Grain Monitor")
-st.sidebar.caption("Cargo Update — June 2026")
+st.sidebar.caption("Cargo Update Information")
 st.sidebar.markdown("---")
 st.sidebar.markdown("""**Commodities**
 - 🟠 Rice — 18.14 kg/bag

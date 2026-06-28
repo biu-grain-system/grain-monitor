@@ -729,5 +729,5 @@ st.markdown("---")
 st.markdown("""<div style="text-align:center;color:#555;font-size:.78rem">
 Kiribati BIU Grain Monitoring System &nbsp;|&nbsp;
 Ministry of Commerce, Industry &amp; Cooperatives &nbsp;|&nbsp;
-Data: cargo_update_June_2026.xlsx &nbsp;|&nbsp; DB: Supabase PostgreSQL
+Data: cargo_update &nbsp;|&nbsp; DB: PostgreSQL
 </div>""", unsafe_allow_html=True)

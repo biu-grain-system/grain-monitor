@@ -428,7 +428,7 @@ with tab4:
 # TAB 5 — ANNUAL REPORT
 # ══════════════════════════════════════════════════════════════════════════════
 with tab5:
-    st.subheader("📈 Annual Incoming Grains Report (2024–2026)")
+    st.subheader("📈 Annual Incoming Grains Report")
     annual = q("SELECT * FROM annual_incoming ORDER BY year, id")
 
     sel_years = st.multiselect("Select Years", [2024, 2025, 2026], default=[2024, 2025])

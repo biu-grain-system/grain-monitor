@@ -60,10 +60,12 @@ section[data-testid="stSidebar"] [data-baseweb="select"] span{
     text-overflow: unset !important;
 }
 
-/* Let the open dropdown list grow tall enough to show every period
-   without needing to scroll for a handful of items */
+/* Let the open dropdown list scroll within itself so it never runs off
+   the bottom of a phone screen — swipe inside the box to see more items */
 ul[role="listbox"]{
-    max-height: 320px !important;
+    max-height: 220px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
 }
 ul[role="listbox"] li{
     white-space: normal !important;

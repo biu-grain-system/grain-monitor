@@ -43,6 +43,31 @@ st.markdown("""<style>
       font-size:.8rem;color:#aab;margin-bottom:.8rem}
 .section-title{font-size:1.1rem;font-weight:700;color:#e67e22;
                margin:1rem 0 .4rem}
+
+/* Give the sidebar a bit more room so period names never get clipped */
+section[data-testid="stSidebar"]{ width: 340px !important; }
+section[data-testid="stSidebar"] > div:first-child{ width: 340px !important; }
+
+/* Stop the closed Report Period box from truncating text with "..." */
+section[data-testid="stSidebar"] [data-baseweb="select"] > div{
+    white-space: normal !important;
+    height: auto !important;
+    min-height: 2.6rem;
+}
+section[data-testid="stSidebar"] [data-baseweb="select"] span{
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+}
+
+/* Let the open dropdown list grow tall enough to show every period
+   without needing to scroll for a handful of items */
+ul[role="listbox"]{
+    max-height: 320px !important;
+}
+ul[role="listbox"] li{
+    white-space: normal !important;
+}
 </style>""", unsafe_allow_html=True)
 
 # ── island_status helper (replaces SQLite VIEW) ───────────────────────────────
